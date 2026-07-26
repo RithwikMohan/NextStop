@@ -25,14 +25,29 @@ class AudioAlarmEngine {
 
   // Request Web Notifications Permission for Background Alarm (Doomscrolling mode)
   async requestNotificationPermission() {
-    if ('Notification' in window) {
-      if (Notification.permission === 'default') {
-        const permission = await Notification.requestPermission();
-        return permission === 'granted';
-      }
-      return Notification.permission === 'granted';
+    if (!('Notification' in window)) {
+      return 'unsupported';
     }
-    return false;
+
+    if (Notification.permission === 'granted') {
+      this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps!');
+      return 'granted';
+    }
+
+    if (Notification.permission === 'denied') {
+      return 'denied';
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps!');
+      }
+      return permission;
+    } catch (err) {
+      console.warn('Notification permission error:', err);
+      return Notification.permission;
+    }
   }
 
   // Keep-Alive Background Audio Session to prevent Mobile OS from throttling GPS when screen is locked
@@ -40,7 +55,7 @@ class AudioAlarmEngine {
     this.initContext();
     try {
       if (!this.silentAudioElement) {
-        // Silent 1-second WAV audio loop
+        // Low-frequency 0.1s audible heartbeat tone loop
         const silentWavBase64 =
           'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
         this.silentAudioElement = new Audio(silentWavBase64);
@@ -80,20 +95,33 @@ class AudioAlarmEngine {
   showBackgroundNotification(title, bodyText) {
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
-        const notification = new Notification(title, {
-          body: bodyText,
-          icon: '/train-icon.svg',
-          badge: '/train-icon.svg',
-          requireInteraction: true,
-          vibrate: [500, 200, 500, 200, 1000, 200, 1000],
-          tag: 'nextstop-metro-alarm',
-          renotify: true,
-        });
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification(title, {
+              body: bodyText,
+              icon: '/train-icon.svg',
+              badge: '/train-icon.svg',
+              vibrate: [500, 200, 500, 200, 1000],
+              tag: 'nextstop-metro-alarm',
+              renotify: true,
+            });
+          });
+        } else {
+          const notification = new Notification(title, {
+            body: bodyText,
+            icon: '/train-icon.svg',
+            badge: '/train-icon.svg',
+            requireInteraction: true,
+            vibrate: [500, 200, 500, 200, 1000],
+            tag: 'nextstop-metro-alarm',
+            renotify: true,
+          });
 
-        notification.onclick = () => {
-          window.focus();
-          notification.close();
-        };
+          notification.onclick = () => {
+            window.focus();
+            notification.close();
+          };
+        }
       } catch (err) {
         console.warn('Notification trigger error:', err);
       }

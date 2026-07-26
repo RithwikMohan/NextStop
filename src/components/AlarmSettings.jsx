@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Volume2, Mic, Smartphone, Check } from 'lucide-react';
+import { Bell, Volume2, Mic, Smartphone, Check, AlertCircle } from 'lucide-react';
 import { audioAlarm } from '../utils/audioAlarm';
 
 export default function AlarmSettings({
@@ -15,8 +15,8 @@ export default function AlarmSettings({
   );
 
   const handleEnableNotifications = async () => {
-    const granted = await audioAlarm.requestNotificationPermission();
-    setNotificationStatus(granted ? 'granted' : 'denied');
+    const status = await audioAlarm.requestNotificationPermission();
+    setNotificationStatus(status);
   };
 
   return (
@@ -29,49 +29,59 @@ export default function AlarmSettings({
       <div
         style={{
           background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))',
-          border: '1.5px solid var(--accent-blue)',
+          border: notificationStatus === 'denied' ? '1.5px solid #EF4444' : '1.5px solid var(--accent-blue)',
           borderRadius: '12px',
           padding: '10px 12px',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
           gap: '8px',
           width: '100%',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Smartphone size={18} color="#2563EB" style={{ flexShrink: 0 }} />
-          <div>
-            <div style={{ fontWeight: '800', fontSize: '0.8rem', color: 'var(--text-primary)' }}>
-              Enable Doomscroll System Alarm
-            </div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '600' }}>
-              Rings over other apps when your phone is locked or browsing elsewhere.
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Smartphone size={18} color="#2563EB" style={{ flexShrink: 0 }} />
+            <div>
+              <div style={{ fontWeight: '800', fontSize: '0.8rem', color: 'var(--text-primary)' }}>
+                Enable Doomscroll System Alarm
+              </div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+                Rings over other apps when your phone is locked or browsing elsewhere.
+              </div>
             </div>
           </div>
+
+          {notificationStatus === 'granted' ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontWeight: '800', fontSize: '0.74rem', flexShrink: 0 }}>
+              <Check size={14} /> Active
+            </div>
+          ) : (
+            <button
+              onClick={handleEnableNotifications}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                background: notificationStatus === 'denied' ? '#DC2626' : '#2563EB',
+                color: '#FFFFFF',
+                border: 'none',
+                fontWeight: '800',
+                fontSize: '0.74rem',
+                cursor: 'pointer',
+                flexShrink: 0,
+              }}
+            >
+              {notificationStatus === 'denied' ? 'Unblock' : 'Allow'}
+            </button>
+          )}
         </div>
 
-        {notificationStatus === 'granted' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontWeight: '800', fontSize: '0.74rem', flexShrink: 0 }}>
-            <Check size={14} /> Active
+        {notificationStatus === 'denied' && (
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '0.72rem', color: '#F87171', background: 'rgba(239, 68, 68, 0.12)', padding: '8px', borderRadius: '8px' }}>
+            <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              Notifications are blocked in Chrome settings. Tap the 🔒 lock icon near the URL bar ➔ <b>Permissions</b> ➔ Set Notifications to <b>Allow</b>!
+            </div>
           </div>
-        ) : (
-          <button
-            onClick={handleEnableNotifications}
-            style={{
-              padding: '6px 10px',
-              borderRadius: '8px',
-              background: '#2563EB',
-              color: '#FFFFFF',
-              border: 'none',
-              fontWeight: '800',
-              fontSize: '0.72rem',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}
-          >
-            Allow
-          </button>
         )}
       </div>
 
