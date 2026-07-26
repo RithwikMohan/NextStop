@@ -14,10 +14,43 @@ import { audioAlarm } from './utils/audioAlarm';
 import { requestWakeLock, releaseWakeLock } from './utils/wakeLock';
 import { Navigation, Sparkles, Heart } from 'lucide-react';
 
-// SETTING: Toggle to show or hide simulator mode for project presentation vs public deployment
 const ENABLE_SIMULATOR_DEMO = true;
 
-export default function App() {
+// React Mobile Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, errorInfo: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, errorInfo: error.toString() };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('React Mobile Error Boundary caught error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '20px', color: '#FFF', background: '#0F172A', minHeight: '100vh', textAlign: 'center' }}>
+          <h2>NextStop Metro</h2>
+          <p style={{ color: '#F87171', margin: '12px 0' }}>An error occurred on mobile initialization.</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{ padding: '10px 20px', background: '#2563EB', color: '#FFF', border: 'none', borderRadius: '10px', fontWeight: '800' }}
+          >
+            Reload App
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function MainAppContent() {
   const [selectedCityId, setSelectedCityId] = useState('hyderabad');
 
   // Unified Boarding & Destination State
@@ -50,11 +83,13 @@ export default function App() {
 
   // Sync document body class when theme changes
   useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.remove('light-mode');
-    } else {
-      document.body.classList.add('light-mode');
-    }
+    try {
+      if (isDarkMode) {
+        document.body.classList.remove('light-mode');
+      } else {
+        document.body.classList.add('light-mode');
+      }
+    } catch (e) {}
   }, [isDarkMode]);
 
   // Compute smart route
@@ -80,11 +115,17 @@ export default function App() {
   const handleStartTracking = (asSimulator = false) => {
     if (!route) return;
 
-    audioAlarm.initContext();
-    audioAlarm.startBackgroundHeartbeat(); // Keep mobile audio & GPS active when screen is off / minimized
-    audioAlarm.requestNotificationPermission(); // Ensure system notifications permission
+    try {
+      audioAlarm.initContext();
+      audioAlarm.startBackgroundHeartbeat();
+      audioAlarm.requestNotificationPermission();
+    } catch (e) {
+      console.warn('Audio/Notification init warning:', e);
+    }
 
-    requestWakeLock().then((active) => setWakeLockActive(active));
+    try {
+      requestWakeLock().then((active) => setWakeLockActive(active));
+    } catch (e) {}
 
     setIsSimulator(asSimulator);
     setIsTracking(true);
@@ -118,8 +159,10 @@ export default function App() {
   const handleStopTracking = () => {
     setIsTracking(false);
     setIsSimulating(false);
-    audioAlarm.stopAlarm();
-    audioAlarm.stopBackgroundHeartbeat();
+    try {
+      audioAlarm.stopAlarm();
+      audioAlarm.stopBackgroundHeartbeat();
+    } catch (e) {}
     setAlarmModalOpen(false);
 
     if (watchIdRef.current !== null && 'geolocation' in navigator) {
@@ -132,7 +175,9 @@ export default function App() {
       simTimerRef.current = null;
     }
 
-    releaseWakeLock();
+    try {
+      releaseWakeLock();
+    } catch (e) {}
     setWakeLockActive(false);
   };
 
@@ -153,8 +198,10 @@ export default function App() {
   // Trigger Alarm (Tone, Speech, Vibration & Lock-Screen System Notification)
   const triggerAlarm = () => {
     setAlarmModalOpen(true);
-    audioAlarm.setAlarmType(soundType);
-    audioAlarm.startTone(soundType);
+    try {
+      audioAlarm.setAlarmType(soundType);
+      audioAlarm.startTone(soundType);
+    } catch (e) {}
 
     let notificationTitle = '🚨 WAKE UP! Next Stop is Coming';
     let notificationBody = `Arriving at ${route?.destination?.name || 'Destination'}. Get ready to deboard!`;
@@ -164,20 +211,23 @@ export default function App() {
       notificationBody = `Deboard train now! ${route?.platformInstructions}`;
     }
 
-    // Trigger System Notification on Lock Screen or over other apps
-    audioAlarm.showBackgroundNotification(notificationTitle, notificationBody);
+    try {
+      audioAlarm.showBackgroundNotification(notificationTitle, notificationBody);
+    } catch (e) {}
 
     if (voiceEnabled && route) {
-      if (!route.isDirect && alarmStage === 'stage1') {
-        audioAlarm.speakAnnouncement(
-          `Line Transfer Alert! Prepare to transfer at ${route.transferStationName}. ${route.platformInstructions}`
-        );
-      } else {
-        const precedingName = route.destination.name;
-        audioAlarm.speakAnnouncement(
-          `Wake Up! Next stop is your destination ${precedingName}. Get ready to deboard!`
-        );
-      }
+      try {
+        if (!route.isDirect && alarmStage === 'stage1') {
+          audioAlarm.speakAnnouncement(
+            `Line Transfer Alert! Prepare to transfer at ${route.transferStationName}. ${route.platformInstructions}`
+          );
+        } else {
+          const precedingName = route.destination.name;
+          audioAlarm.speakAnnouncement(
+            `Wake Up! Next stop is your destination ${precedingName}. Get ready to deboard!`
+          );
+        }
+      } catch (e) {}
     }
   };
 
@@ -252,7 +302,9 @@ export default function App() {
 
   // Dismiss Alarm
   const handleDismissAlarm = () => {
-    audioAlarm.stopAlarm();
+    try {
+      audioAlarm.stopAlarm();
+    } catch (e) {}
     setAlarmModalOpen(false);
 
     if (!route.isDirect && alarmStage === 'stage1') {
@@ -263,7 +315,9 @@ export default function App() {
 
   // Snooze Alarm for 1 minute
   const handleSnoozeAlarm = () => {
-    audioAlarm.stopAlarm();
+    try {
+      audioAlarm.stopAlarm();
+    } catch (e) {}
     setAlarmModalOpen(false);
 
     setTimeout(() => {
@@ -341,7 +395,7 @@ export default function App() {
           />
 
           {/* Launch Buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
             <button
               className="btn-primary"
               onClick={() => handleStartTracking(false)}
@@ -378,10 +432,14 @@ export default function App() {
             wakeLockActive={wakeLockActive}
             onToggleWakeLock={() => {
               if (wakeLockActive) {
-                releaseWakeLock();
+                try {
+                  releaseWakeLock();
+                } catch (e) {}
                 setWakeLockActive(false);
               } else {
-                requestWakeLock().then((active) => setWakeLockActive(active));
+                try {
+                  requestWakeLock().then((active) => setWakeLockActive(active));
+                } catch (e) {}
               }
             }}
             lineColor={route ? route.lineColor : '#3B82F6'}
@@ -428,12 +486,20 @@ export default function App() {
       )}
 
       {/* Footer & Personal Credit */}
-      <footer style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
+      <footer style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 'auto', paddingTop: '14px', display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
         <div style={{ fontWeight: '800', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
           Built with <Heart size={14} color="#EF4444" fill="#EF4444" /> by <span style={{ color: 'var(--accent-blue)', fontWeight: '900' }}>Rithwik Mohan</span>
         </div>
         <div>NextStop Metro • Indian Metro GPS Commute Alarm &amp; Interchange Guide</div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <MainAppContent />
+    </ErrorBoundary>
   );
 }

@@ -1,26 +1,8 @@
-// NextStop Metro Progressive Web App (PWA) Service Worker
+// NextStop Metro Fail-Safe PWA Service Worker
 
-const CACHE_NAME = 'nextstop-metro-cache-v1';
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.svg',
-  '/train-icon.svg',
-  '/HMRRouteMap_new.pdf',
-  '/maps/Delhi_Metro_Map.svg',
-  '/maps/Bengaluru_Namma_Metro_Map.svg',
-  '/maps/Mumbai_Metro_Map.svg',
-  '/maps/Chennai_Metro_Map.svg',
-  '/maps/Kolkata_Metro_Map.svg',
-];
+const CACHE_NAME = 'nextstop-metro-v2';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
   self.skipWaiting();
 });
 
@@ -40,14 +22,19 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Only handle GET requests for same origin assets
+  if (event.request.method !== 'GET') return;
+  if (!event.request.url.startsWith(self.location.origin)) return;
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request).then((cached) => {
+        return cached || caches.match('/index.html');
+      });
     })
   );
 });
 
-// Background Sync / Notification Event
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
