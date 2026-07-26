@@ -7,6 +7,7 @@ class AudioAlarmEngine {
     this.gainNode = null;
     this.isPlaying = false;
     this.intervalId = null;
+    this.speechIntervalId = null;
     this.alarmType = 'metro_chime'; // 'metro_chime', 'loud_siren', 'digital_beep'
     this.keepAliveAudio = null;
   }
@@ -57,7 +58,7 @@ class AudioAlarmEngine {
       if (!this.keepAliveAudio) {
         this.keepAliveAudio = new Audio('/keepalive.wav');
         this.keepAliveAudio.loop = true;
-        this.keepAliveAudio.volume = 0.05; // Soft audible background audio session
+        this.keepAliveAudio.volume = 0.05;
       }
 
       this.keepAliveAudio
@@ -101,9 +102,10 @@ class AudioAlarmEngine {
               body: bodyText,
               icon: '/train-icon.svg',
               badge: '/train-icon.svg',
-              vibrate: [500, 200, 500, 200, 1000],
+              vibrate: [500, 200, 500, 200, 1000, 200, 1000],
               tag: 'nextstop-metro-alarm',
               renotify: true,
+              requireInteraction: true,
             });
           });
         } else {
@@ -112,7 +114,7 @@ class AudioAlarmEngine {
             icon: '/train-icon.svg',
             badge: '/train-icon.svg',
             requireInteraction: true,
-            vibrate: [500, 200, 500, 200, 1000],
+            vibrate: [500, 200, 500, 200, 1000, 200, 1000],
             tag: 'nextstop-metro-alarm',
             renotify: true,
           });
@@ -213,26 +215,37 @@ class AudioAlarmEngine {
     }
   }
 
-  // Spoken voice announcement
+  // Spoken voice announcement (Repeats voice alert every 4 seconds)
   speakAnnouncement(text) {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (!('speechSynthesis' in window)) return;
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.1;
-      utterance.volume = 1.0;
+    const playVoice = () => {
+      if (!this.isPlaying) return;
+      try {
+        window.speechSynthesis.cancel();
 
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(
-        (v) => v.lang.includes('en-IN') || v.lang.includes('en-GB') || v.lang.includes('en-US')
-      );
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1;
+        utterance.volume = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(
+          (v) => v.lang.includes('en-IN') || v.lang.includes('en-GB') || v.lang.includes('en-US')
+        );
+        if (preferredVoice) {
+          utterance.voice = preferredVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.warn('Speech synthesis error:', e);
       }
+    };
 
-      window.speechSynthesis.speak(utterance);
-    }
+    playVoice();
+    if (this.speechIntervalId) clearInterval(this.speechIntervalId);
+    this.speechIntervalId = setInterval(playVoice, 4500);
   }
 
   // Stop tone & clear
@@ -241,6 +254,10 @@ class AudioAlarmEngine {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
+    }
+    if (this.speechIntervalId) {
+      clearInterval(this.speechIntervalId);
+      this.speechIntervalId = null;
     }
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
