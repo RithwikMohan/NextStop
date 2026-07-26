@@ -47,11 +47,11 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
           <div
             style={{
               fontSize: '0.72rem',
-              fontWeight: '700',
+              fontWeight: '800',
               color: 'var(--accent-blue)',
             }}
           >
-            Metro GPS Commute Alarm
+            By Rithwik Mohan • GPS Alarm
           </div>
         </div>
       </div>

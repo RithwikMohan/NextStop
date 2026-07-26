@@ -12,7 +12,7 @@ import { findSmartRoute } from './utils/routingEngine';
 import { calculateHaversineDistance } from './utils/geoUtils';
 import { audioAlarm } from './utils/audioAlarm';
 import { requestWakeLock, releaseWakeLock } from './utils/wakeLock';
-import { Navigation, Sparkles } from 'lucide-react';
+import { Navigation, Sparkles, Heart } from 'lucide-react';
 
 // SETTING: Toggle to show or hide simulator mode for project presentation vs public deployment
 const ENABLE_SIMULATOR_DEMO = true;
@@ -105,6 +105,8 @@ export default function App() {
           (err) => console.warn('GPS error:', err.message),
           { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
         );
+      } else {
+        alert('Geolocation is not supported by your device browser.');
       }
     }
   };
@@ -272,7 +274,6 @@ export default function App() {
         selectedCityId={selectedCityId}
         onCityChange={(cityId) => {
           setSelectedCityId(cityId);
-          // Set default origin/dest when switching city
           if (cityId === 'delhi') {
             setOriginName('Samaypur Badli');
             setDestName('Millennium City Centre Gurugram');
@@ -341,7 +342,7 @@ export default function App() {
               <button
                 className="btn-primary btn-secondary"
                 onClick={() => handleStartTracking(true)}
-                style={{ color: '#FDE68A', borderColor: 'rgba(245, 158, 11, 0.3)' }}
+                style={{ color: '#D97706', borderColor: '#F59E0B' }}
               >
                 <Sparkles size={18} color="#F59E0B" /> TEST DEMO IN SIMULATOR MODE
               </button>
@@ -385,7 +386,7 @@ export default function App() {
         </>
       )}
 
-      {/* Metro Map Modal - Pass selectedCityId */}
+      {/* Metro Map Modal */}
       {isMapOpen && (
         <MetroMapModal
           cityId={selectedCityId}
@@ -411,9 +412,12 @@ export default function App() {
         />
       )}
 
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 'auto', paddingTop: '16px' }}>
-        NextStop Metro • Indian Metro GPS Alarm & Platform Transfer Guide • 100% Geofenced PWA
+      {/* Footer & Personal Credit */}
+      <footer style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 'auto', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
+        <div style={{ fontWeight: '800', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          Built with <Heart size={14} color="#EF4444" fill="#EF4444" /> by <span style={{ color: 'var(--accent-blue)', fontWeight: '900' }}>Rithwik Mohan</span>
+        </div>
+        <div>NextStop Metro • Indian Metro GPS Commute Alarm &amp; Interchange Guide</div>
       </footer>
     </div>
   );
