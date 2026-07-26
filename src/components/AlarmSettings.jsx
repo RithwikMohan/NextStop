@@ -20,9 +20,9 @@ export default function AlarmSettings({
   };
 
   return (
-    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', fontWeight: '800', color: 'var(--accent-blue)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-        <Bell size={16} /> Alarm &amp; Background Notification Preferences
+    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', fontWeight: '800', color: 'var(--accent-blue)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        <Bell size={15} /> Alarm &amp; Notification Settings
       </div>
 
       {/* Background Doomscroll Notification Permission Card */}
@@ -30,41 +30,44 @@ export default function AlarmSettings({
         style={{
           background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))',
           border: '1.5px solid var(--accent-blue)',
-          borderRadius: '14px',
-          padding: '12px 14px',
+          borderRadius: '12px',
+          padding: '10px 12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          gap: '8px',
+          width: '100%',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Smartphone size={20} color="#2563EB" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Smartphone size={18} color="#2563EB" style={{ flexShrink: 0 }} />
           <div>
-            <div style={{ fontWeight: '800', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+            <div style={{ fontWeight: '800', fontSize: '0.8rem', color: 'var(--text-primary)' }}>
               Enable Doomscroll System Alarm
             </div>
-            <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: '600' }}>
-              Rings over other apps when your phone screen is locked or browsing elsewhere.
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+              Rings over other apps when your phone is locked or browsing elsewhere.
             </div>
           </div>
         </div>
 
         {notificationStatus === 'granted' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontWeight: '800', fontSize: '0.78rem' }}>
-            <Check size={16} /> Active
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#16A34A', fontWeight: '800', fontSize: '0.74rem', flexShrink: 0 }}>
+            <Check size={14} /> Active
           </div>
         ) : (
           <button
             onClick={handleEnableNotifications}
             style={{
-              padding: '6px 12px',
-              borderRadius: '10px',
+              padding: '6px 10px',
+              borderRadius: '8px',
               background: '#2563EB',
               color: '#FFFFFF',
               border: 'none',
               fontWeight: '800',
-              fontSize: '0.75rem',
+              fontSize: '0.72rem',
               cursor: 'pointer',
+              flexShrink: 0,
             }}
           >
             Allow
@@ -75,60 +78,61 @@ export default function AlarmSettings({
       {/* Trigger Mode */}
       <div className="form-group">
         <label className="form-label">Alarm Trigger Timing</label>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           <button
             onClick={() => onTriggerModeChange('1_stop_before')}
             style={{
-              padding: '10px 12px',
+              padding: '8px 10px',
               borderRadius: '10px',
               border: triggerMode === '1_stop_before' ? '2px solid #2563EB' : '1px solid var(--border-glass)',
               background: triggerMode === '1_stop_before' ? 'rgba(37, 99, 235, 0.15)' : 'var(--bg-card)',
               color: triggerMode === '1_stop_before' ? '#2563EB' : 'var(--text-primary)',
               fontWeight: '800',
-              fontSize: '0.78rem',
+              fontSize: '0.74rem',
               cursor: 'pointer',
             }}
           >
-            🔔 1 Stop Before (Recommended)
+            🔔 1 Stop Before
           </button>
 
           <button
             onClick={() => onTriggerModeChange('at_destination')}
             style={{
-              padding: '10px 12px',
+              padding: '8px 10px',
               borderRadius: '10px',
               border: triggerMode === 'at_destination' ? '2px solid #2563EB' : '1px solid var(--border-glass)',
               background: triggerMode === 'at_destination' ? 'rgba(37, 99, 235, 0.15)' : 'var(--bg-card)',
               color: triggerMode === 'at_destination' ? '#2563EB' : 'var(--text-primary)',
               fontWeight: '800',
-              fontSize: '0.78rem',
+              fontSize: '0.74rem',
               cursor: 'pointer',
             }}
           >
-            📍 At Destination Stop
+            📍 At Destination
           </button>
         </div>
       </div>
 
       {/* Sound Type & Voice Toggle */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
         <div className="form-group">
           <label className="form-label">
-            <Volume2 size={14} /> Ringtone Sound
+            <Volume2 size={13} /> Ringtone Sound
           </label>
           <select
             value={soundType}
             onChange={(e) => onSoundTypeChange(e.target.value)}
             style={{
-              padding: '10px',
+              padding: '8px',
               borderRadius: '10px',
               background: 'var(--input-bg)',
               border: '1.5px solid var(--accent-blue)',
               color: 'var(--text-primary)',
               fontWeight: '800',
-              fontSize: '0.8rem',
+              fontSize: '0.76rem',
               outline: 'none',
               cursor: 'pointer',
+              width: '100%',
             }}
           >
             <option value="metro_chime" style={{ color: '#020617', fontWeight: '700' }}>Metro Station Chime</option>
@@ -139,22 +143,23 @@ export default function AlarmSettings({
 
         <div className="form-group">
           <label className="form-label">
-            <Mic size={14} /> Voice Announcement
+            <Mic size={13} /> Voice Announcement
           </label>
           <button
             onClick={() => onVoiceEnabledChange(!voiceEnabled)}
             style={{
-              padding: '10px',
+              padding: '8px',
               borderRadius: '10px',
               border: voiceEnabled ? '2px solid #16A34A' : '1px solid var(--border-glass)',
               background: voiceEnabled ? 'rgba(22, 163, 74, 0.15)' : 'var(--bg-card)',
               color: voiceEnabled ? '#16A34A' : 'var(--text-primary)',
               fontWeight: '800',
-              fontSize: '0.8rem',
+              fontSize: '0.76rem',
               cursor: 'pointer',
+              width: '100%',
             }}
           >
-            {voiceEnabled ? '🗣️ Spoken Voice ON' : '🔇 Muted Voice'}
+            {voiceEnabled ? '🗣️ Spoken ON' : '🔇 Muted'}
           </button>
         </div>
       </div>
