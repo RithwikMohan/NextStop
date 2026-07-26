@@ -1,4 +1,4 @@
-// NextStop Audio, Speech, Vibration, Web System Notification & Background Media Session Engine
+// NextStop Audio, Speech, Vibration, Web System Notification & Lock-Screen Media Session Engine
 
 class AudioAlarmEngine {
   constructor() {
@@ -8,7 +8,7 @@ class AudioAlarmEngine {
     this.isPlaying = false;
     this.intervalId = null;
     this.alarmType = 'metro_chime'; // 'metro_chime', 'loud_siren', 'digital_beep'
-    this.silentAudioElement = null;
+    this.keepAliveAudio = null;
   }
 
   initContext() {
@@ -23,14 +23,14 @@ class AudioAlarmEngine {
     }
   }
 
-  // Request Web Notifications Permission for Background Alarm (Doomscrolling mode)
+  // Request Web Notifications Permission for Lock Screen System Alarms
   async requestNotificationPermission() {
     if (!('Notification' in window)) {
       return 'unsupported';
     }
 
     if (Notification.permission === 'granted') {
-      this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps!');
+      this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps & lock screen!');
       return 'granted';
     }
 
@@ -41,7 +41,7 @@ class AudioAlarmEngine {
     try {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps!');
+        this.showBackgroundNotification('🔔 NextStop Metro Notifications Active', 'System alarm alerts will ring over other apps & lock screen!');
       }
       return permission;
     } catch (err) {
@@ -50,48 +50,48 @@ class AudioAlarmEngine {
     }
   }
 
-  // Keep-Alive Background Audio Session to prevent Mobile OS from throttling GPS when screen is locked
+  // Active Background Audio & Media Session: Prevents Android Chrome & iOS Safari from freezing GPS when screen is locked or browsing other apps
   startBackgroundHeartbeat() {
     this.initContext();
     try {
-      if (!this.silentAudioElement) {
-        // Low-frequency 0.1s audible heartbeat tone loop
-        const silentWavBase64 =
-          'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
-        this.silentAudioElement = new Audio(silentWavBase64);
-        this.silentAudioElement.loop = true;
+      if (!this.keepAliveAudio) {
+        this.keepAliveAudio = new Audio('/keepalive.wav');
+        this.keepAliveAudio.loop = true;
+        this.keepAliveAudio.volume = 0.05; // Soft audible background audio session
       }
 
-      this.silentAudioElement
+      this.keepAliveAudio
         .play()
         .then(() => {
           if ('mediaSession' in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
-              title: 'NextStop Commute GPS Alarm',
-              artist: 'Active Metro Geofence Tracking',
-              album: 'NextStop Metro',
+              title: 'NextStop GPS Commute Alarm Active',
+              artist: 'Real-Time Metro Geofence Tracking',
+              album: 'NextStop Metro (Rithwik Mohan)',
               artwork: [{ src: '/train-icon.svg', sizes: '96x96', type: 'image/svg+xml' }],
             });
 
-            navigator.mediaSession.setActionHandler('play', () => {});
+            navigator.mediaSession.setActionHandler('play', () => {
+              if (this.keepAliveAudio) this.keepAliveAudio.play();
+            });
             navigator.mediaSession.setActionHandler('pause', () => {});
           }
         })
-        .catch((err) => console.warn('Background heartbeat audio play warning:', err));
+        .catch((err) => console.warn('Background heartbeat audio session warning:', err));
     } catch (e) {
       console.warn('Background audio session warning:', e);
     }
   }
 
   stopBackgroundHeartbeat() {
-    if (this.silentAudioElement) {
+    if (this.keepAliveAudio) {
       try {
-        this.silentAudioElement.pause();
+        this.keepAliveAudio.pause();
       } catch (e) {}
     }
   }
 
-  // Show System Notification on Lock Screen or over other apps
+  // Show System Notification on Lock Screen or over other apps (Instagram / YouTube)
   showBackgroundNotification(title, bodyText) {
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
