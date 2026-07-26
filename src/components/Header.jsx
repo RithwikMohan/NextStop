@@ -5,24 +5,26 @@ import { CITIES } from '../data/metroData';
 export default function Header({ selectedCityId, onCityChange, isDarkMode, onToggleDarkMode, onOpenMap }) {
   return (
     <header
-      className="glass-card"
       style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '12px 14px',
-        marginBottom: '2px',
+        padding: '2px 0 6px 0',
+        width: '100%',
         flexWrap: 'wrap',
-        gap: '10px',
+        gap: '8px',
+        borderBottom: '1px solid var(--border-glass)',
+        paddingBottom: '10px',
+        marginBottom: '4px',
       }}
     >
       {/* Brand & Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div
           style={{
             background: 'linear-gradient(135deg, #EC4899, #8B5CF6)',
-            width: '38px',
-            height: '38px',
+            width: '36px',
+            height: '36px',
             borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
@@ -31,7 +33,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             flexShrink: 0,
           }}
         >
-          <Train size={22} color="#FFFFFF" />
+          <Train size={20} color="#FFFFFF" />
         </div>
 
         <div>
@@ -39,7 +41,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: '900',
-              fontSize: '1.15rem',
+              fontSize: '1.1rem',
               letterSpacing: '-0.5px',
               color: 'var(--text-primary)',
               lineHeight: '1.1',
@@ -49,7 +51,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
           </div>
           <div
             style={{
-              fontSize: '0.68rem',
+              fontSize: '0.66rem',
               fontWeight: '800',
               color: 'var(--accent-blue)',
             }}
@@ -71,11 +73,11 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '2px solid #2563EB',
             borderRadius: '10px',
             padding: '6px 8px',
-            fontSize: '0.76rem',
+            fontSize: '0.75rem',
             fontWeight: '800',
             outline: 'none',
             cursor: 'pointer',
-            maxWidth: '125px',
+            maxWidth: '120px',
           }}
         >
           {CITIES.map((city) => (
@@ -99,7 +101,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            fontSize: '0.74rem',
+            fontSize: '0.72rem',
             fontWeight: '800',
             flexShrink: 0,
           }}

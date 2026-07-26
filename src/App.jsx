@@ -355,37 +355,7 @@ function MainAppContent() {
 
   return (
     <div className="app-container">
-      {/* Header */}
-      <Header
-        selectedCityId={selectedCityId}
-        onCityChange={(cityId) => {
-          setSelectedCityId(cityId);
-          if (cityId === 'delhi') {
-            setOriginName('Samaypur Badli');
-            setDestName('Millennium City Centre Gurugram');
-          } else if (cityId === 'bengaluru') {
-            setOriginName('Whitefield (Kadugodi)');
-            setDestName('Nadaprabhu Kempegowda Station (Majestic)');
-          } else if (cityId === 'mumbai') {
-            setOriginName('Versova');
-            setDestName('Ghatkopar');
-          } else if (cityId === 'chennai') {
-            setOriginName('Wimco Nagar Depot');
-            setDestName('Chennai International Airport');
-          } else if (cityId === 'kolkata') {
-            setOriginName('Dakshineswar');
-            setDestName('Kavi Subhash (New Garia)');
-          } else {
-            setOriginName('Raidurg');
-            setDestName('Erragadda');
-          }
-        }}
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-        onOpenMap={() => setIsMapOpen(true)}
-      />
-
-      {/* Main Content Area: UNIFIED MAIN CARD CONTAINER matching LiveTracker card screen fit */}
+      {/* Main Content Area: UNIFIED SINGLE GLASS-CARD CONTAINER MATCHING LIVETRACKER CARD FIT */}
       {!isTracking ? (
         <div
           className="glass-card"
@@ -395,11 +365,41 @@ function MainAppContent() {
             gap: '14px',
             border: '1.5px solid var(--border-glass)',
             borderRadius: '18px',
-            padding: '14px',
+            padding: '14px 14px',
             boxSizing: 'border-box',
             width: '100%',
           }}
         >
+          {/* Header embedded inside the main glass card */}
+          <Header
+            selectedCityId={selectedCityId}
+            onCityChange={(cityId) => {
+              setSelectedCityId(cityId);
+              if (cityId === 'delhi') {
+                setOriginName('Samaypur Badli');
+                setDestName('Millennium City Centre Gurugram');
+              } else if (cityId === 'bengaluru') {
+                setOriginName('Whitefield (Kadugodi)');
+                setDestName('Nadaprabhu Kempegowda Station (Majestic)');
+              } else if (cityId === 'mumbai') {
+                setOriginName('Versova');
+                setDestName('Ghatkopar');
+              } else if (cityId === 'chennai') {
+                setOriginName('Wimco Nagar Depot');
+                setDestName('Chennai International Airport');
+              } else if (cityId === 'kolkata') {
+                setOriginName('Dakshineswar');
+                setDestName('Kavi Subhash (New Garia)');
+              } else {
+                setOriginName('Raidurg');
+                setDestName('Erragadda');
+              }
+            }}
+            isDarkMode={isDarkMode}
+            onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+            onOpenMap={() => setIsMapOpen(true)}
+          />
+
           {/* Quick Saved Commutes */}
           <FavoritesBar onSelectFavorite={handleSelectFavorite} />
 
