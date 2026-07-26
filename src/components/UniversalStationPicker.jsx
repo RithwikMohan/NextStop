@@ -58,6 +58,8 @@ export default function UniversalStationPicker({
         position: 'relative',
         zIndex: isOriginOpen || isDestOpen ? 50 : 5,
         width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <div
@@ -65,16 +67,17 @@ export default function UniversalStationPicker({
           display: 'flex',
           flexDirection: 'column',
           gap: '4px',
-          fontSize: '0.78rem',
+          fontSize: '0.76rem',
           fontWeight: '800',
           color: 'var(--text-secondary)',
           textTransform: 'uppercase',
           letterSpacing: '0.5px',
           width: '100%',
+          boxSizing: 'border-box',
         }}
       >
-        <span style={{ color: 'var(--text-primary)', wordBreak: 'break-word' }}>📍 Boarding &amp; Destination Selector</span>
-        <span style={{ fontSize: '0.7rem', color: '#38BDF8', textTransform: 'none', fontWeight: '600' }}>
+        <span style={{ color: 'var(--text-primary)', wordBreak: 'break-word', overflowWrap: 'break-word' }}>📍 Boarding &amp; Destination Selector</span>
+        <span style={{ fontSize: '0.7rem', color: '#38BDF8', textTransform: 'none', fontWeight: '600', wordBreak: 'break-word' }}>
           {cityInfo.name} Unified Search
         </span>
       </div>

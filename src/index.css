@@ -62,7 +62,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   transition: background 0.3s ease, color 0.3s ease;
-  padding: 10px 8px;
+  padding: 14px 12px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -76,6 +76,7 @@ body {
   gap: 12px;
   overflow-x: hidden;
   box-sizing: border-box;
+  padding: 0 2px;
 }
 
 /* Glassmorphism Cards */
@@ -84,8 +85,8 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-glass);
-  border-radius: 16px;
-  padding: 14px 12px;
+  border-radius: 18px;
+  padding: 14px 14px;
   box-shadow: var(--card-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
@@ -201,13 +202,13 @@ body.light-mode .form-label {
 /* Responsive Mobile Layout Adjustments */
 @media (max-width: 440px) {
   body {
-    padding: 6px 4px;
+    padding: 10px 8px;
   }
   .app-container {
     padding: 0;
   }
   .glass-card {
-    padding: 12px 10px;
-    border-radius: 14px;
+    padding: 14px 12px;
+    border-radius: 16px;
   }
 }

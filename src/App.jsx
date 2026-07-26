@@ -79,6 +79,7 @@ function MainAppContent() {
   const [isMapOpen, setIsMapOpen] = useState(false);
 
   const watchIdRef = useRef(null);
+  const gpsPollIntervalRef = useRef(null);
   const simTimerRef = useRef(null);
 
   // Sync document body class when theme changes
@@ -146,9 +147,20 @@ function MainAppContent() {
 
             checkGpsAlarmTrigger(userLat, userLng);
           },
-          (err) => console.warn('GPS error:', err.message),
-          { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 }
+          (err) => console.warn('GPS watch error:', err.message),
+          { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
         );
+
+        // Fallback periodic background location polling (every 4s) to ensure background tracking on Android
+        gpsPollIntervalRef.current = setInterval(() => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              checkGpsAlarmTrigger(pos.coords.latitude, pos.coords.longitude);
+            },
+            (err) => console.warn('Background GPS poll error:', err.message),
+            { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+          );
+        }, 4000);
       } else {
         alert('Geolocation is not supported by your device browser.');
       }
@@ -168,6 +180,11 @@ function MainAppContent() {
     if (watchIdRef.current !== null && 'geolocation' in navigator) {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
+    }
+
+    if (gpsPollIntervalRef.current) {
+      clearInterval(gpsPollIntervalRef.current);
+      gpsPollIntervalRef.current = null;
     }
 
     if (simTimerRef.current) {
