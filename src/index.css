@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+
+:root {
+  /* Dark Mode Default Theme System */
+  --bg-gradient: radial-gradient(circle at 50% 0%, #1E293B 0%, #0F172A 50%, #090D16 100%);
+  --bg-card: rgba(30, 41, 59, 0.75);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --accent-blue: #3B82F6;
+  --accent-red: #EF4444;
+  --accent-green: #10B981;
+  --accent-purple: #8B5CF6;
+  --accent-amber: #F59E0B;
+  --card-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  --input-bg: rgba(15, 23, 42, 0.6);
+  --input-border-blue: rgba(59, 130, 246, 0.4);
+  --input-border-red: rgba(239, 68, 68, 0.4);
+}
+
+/* Light Mode Premium Apple-Vite Aesthetic System */
+body.light-mode {
+  --bg-gradient: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 40%, #EDF2F7 100%);
+  --bg-card: #FFFFFF;
+  --border-glass: #CBD5E1;
+  --text-primary: #020617;
+  --text-secondary: #0F172A;
+  --text-muted: #334155;
+  --accent-blue: #2563EB;
+  --accent-red: #DC2626;
+  --accent-green: #059669;
+  --accent-purple: #7C3AED;
+  --accent-amber: #D97706;
+  --card-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+  --input-bg: #F8FAFC;
+  --input-border-blue: #2563EB;
+  --input-border-red: #DC2626;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.light-mode .glass-card {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+body.light-mode .btn-secondary {
+  background: #FFFFFF;
+  border: 2px solid #D97706;
+  color: #B45309;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.15);
+}
+
+/* Form Controls */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.light-mode .form-label {
+  color: #0F172A;
+}
+
+/* Badges */
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Alarm Modal Popup Overlay */
+.alarm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(2, 6, 23, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: pulseBg 1.5s infinite alternate;
+}
+
+@keyframes pulseBg {
+  0% { background: rgba(15, 23, 42, 0.94); }
+  100% { background: rgba(153, 27, 27, 0.95); }
+}

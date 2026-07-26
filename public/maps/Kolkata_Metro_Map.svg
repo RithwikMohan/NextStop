@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%" style="background:#0F172A;">
+  <!-- Header -->
+  <rect x="0" y="0" width="1000" height="70" fill="#1E293B" />
+  <text x="30" y="42" fill="#FFFFFF" font-family="sans-serif" font-size="22" font-weight="800">Kolkata Metro Rail Corporation (KMRCL) - Official Network Map</text>
+  <text x="730" y="42" fill="#0284C7" font-family="sans-serif" font-size="14" font-weight="700">Line 1 North-South</text>
+
+  <!-- Background Grid -->
+  <defs>
+    <pattern id="gridKMRCL" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="70" width="1000" height="580" fill="url(#gridKMRCL)" />
+
+  <!-- LINE 1 (Dakshineswar -> Esplanade -> Kavi Subhash) -->
+  <path d="M 480,100 L 480,580" fill="none" stroke="#0284C7" stroke-width="12" stroke-linecap="round" />
+
+  <!-- LINE 2 (East-West Underwater Metro through Hooghly River) -->
+  <path d="M 90,320 L 870,320" fill="none" stroke="#10B981" stroke-width="10" stroke-dasharray="16,8" stroke-linecap="round" />
+
+  <!-- STATIONS -->
+  <circle cx="480" cy="110" r="10" fill="#0284C7" stroke="#FFF" stroke-width="2" />
+  <text x="590" y="115" fill="#38BDF8" font-family="sans-serif" font-size="12" font-weight="700">Dakshineswar (1)</text>
+
+  <circle cx="480" cy="190" r="8" fill="#0284C7" />
+  <text x="590" y="194" fill="#CBD5E1" font-family="sans-serif" font-size="11">Dum Dum (2)</text>
+
+  <circle cx="480" cy="250" r="8" fill="#0284C7" />
+  <text x="590" y="254" fill="#CBD5E1" font-family="sans-serif" font-size="11">Shyambazar (3)</text>
+
+  <!-- ESPLANADE INTERCHANGE HUB -->
+  <circle cx="480" cy="320" r="26" fill="rgba(2, 132, 199, 0.25)" stroke="#0284C7" stroke-width="4" />
+  <circle cx="480" cy="320" r="14" fill="#FFF" stroke="#10B981" stroke-width="4" />
+  <text x="480" y="278" fill="#FDE68A" font-family="sans-serif" font-size="15" font-weight="800" text-anchor="middle">🔀 Esplanade Hub</text>
+  <text x="480" y="365" fill="#38BDF8" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">Line 1 ↔ Line 2 Underwater Metro Transfer</text>
+
+  <circle cx="480" cy="420" r="8" fill="#0284C7" />
+  <text x="590" y="424" fill="#CBD5E1" font-family="sans-serif" font-size="11">Park Street (5)</text>
+
+  <circle cx="480" cy="490" r="8" fill="#0284C7" />
+  <text x="590" y="494" fill="#CBD5E1" font-family="sans-serif" font-size="11">Kalighat (6)</text>
+
+  <circle cx="480" cy="570" r="10" fill="#0284C7" stroke="#FFF" stroke-width="2" />
+  <text x="590" y="574" fill="#38BDF8" font-family="sans-serif" font-size="12" font-weight="700">Kavi Subhash (New Garia) (7)</text>
+
+  <!-- Legend -->
+  <rect x="50" y="500" width="320" height="90" fill="#1E293B" rx="10" stroke="rgba(255,255,255,0.1)" />
+  <text x="65" y="525" fill="#FFF" font-family="sans-serif" font-size="12" font-weight="800">KOLKATA METRO LEGEND</text>
+  <circle cx="75" cy="550" r="6" fill="#0284C7" />
+  <text x="90" y="554" fill="#CBD5E1" font-family="sans-serif" font-size="11">Line 1 North-South (Dakshineswar ↔ Kavi Subhash)</text>
+  <circle cx="75" cy="570" r="6" fill="#10B981" />
+  <text x="90" y="574" fill="#CBD5E1" font-family="sans-serif" font-size="11">Line 2 East-West Underwater Metro</text>
+</svg>

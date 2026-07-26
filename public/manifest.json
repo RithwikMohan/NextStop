@@ -1,0 +1,17 @@
+{
+  "short_name": "NextStop",
+  "name": "NextStop Metro - GPS Commute Alarm",
+  "icons": [
+    {
+      "src": "train-icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#090D16",
+  "theme_color": "#090D16",
+  "display": "standalone",
+  "orientation": "portrait"
+}
