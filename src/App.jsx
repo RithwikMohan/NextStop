@@ -81,6 +81,9 @@ export default function App() {
     if (!route) return;
 
     audioAlarm.initContext();
+    audioAlarm.startBackgroundHeartbeat(); // Keep mobile audio & GPS active when screen is off / minimized
+    audioAlarm.requestNotificationPermission(); // Ensure system notifications permission
+
     requestWakeLock().then((active) => setWakeLockActive(active));
 
     setIsSimulator(asSimulator);
@@ -103,7 +106,7 @@ export default function App() {
             checkGpsAlarmTrigger(userLat, userLng);
           },
           (err) => console.warn('GPS error:', err.message),
-          { enableHighAccuracy: true, maximumAge: 2000, timeout: 10000 }
+          { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 }
         );
       } else {
         alert('Geolocation is not supported by your device browser.');
@@ -116,6 +119,7 @@ export default function App() {
     setIsTracking(false);
     setIsSimulating(false);
     audioAlarm.stopAlarm();
+    audioAlarm.stopBackgroundHeartbeat();
     setAlarmModalOpen(false);
 
     if (watchIdRef.current !== null && 'geolocation' in navigator) {
@@ -146,11 +150,22 @@ export default function App() {
     }
   };
 
-  // Trigger Alarm
+  // Trigger Alarm (Tone, Speech, Vibration & Lock-Screen System Notification)
   const triggerAlarm = () => {
     setAlarmModalOpen(true);
     audioAlarm.setAlarmType(soundType);
     audioAlarm.startTone(soundType);
+
+    let notificationTitle = '🚨 WAKE UP! Next Stop is Coming';
+    let notificationBody = `Arriving at ${route?.destination?.name || 'Destination'}. Get ready to deboard!`;
+
+    if (!route?.isDirect && alarmStage === 'stage1') {
+      notificationTitle = `🔀 Line Transfer Alert at ${route?.transferStationName}`;
+      notificationBody = `Deboard train now! ${route?.platformInstructions}`;
+    }
+
+    // Trigger System Notification on Lock Screen or over other apps
+    audioAlarm.showBackgroundNotification(notificationTitle, notificationBody);
 
     if (voiceEnabled && route) {
       if (!route.isDirect && alarmStage === 'stage1') {

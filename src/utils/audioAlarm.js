@@ -1,4 +1,4 @@
-// NextStop Audio, Speech, Vibration & Web System Notification Engine
+// NextStop Audio, Speech, Vibration, Web System Notification & Background Media Session Engine
 
 class AudioAlarmEngine {
   constructor() {
@@ -8,6 +8,7 @@ class AudioAlarmEngine {
     this.isPlaying = false;
     this.intervalId = null;
     this.alarmType = 'metro_chime'; // 'metro_chime', 'loud_siren', 'digital_beep'
+    this.silentAudioElement = null;
   }
 
   initContext() {
@@ -34,16 +35,59 @@ class AudioAlarmEngine {
     return false;
   }
 
-  // Show System Notification while doomscrolling other apps
+  // Keep-Alive Background Audio Session to prevent Mobile OS from throttling GPS when screen is locked
+  startBackgroundHeartbeat() {
+    this.initContext();
+    try {
+      if (!this.silentAudioElement) {
+        // Silent 1-second WAV audio loop
+        const silentWavBase64 =
+          'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+        this.silentAudioElement = new Audio(silentWavBase64);
+        this.silentAudioElement.loop = true;
+      }
+
+      this.silentAudioElement
+        .play()
+        .then(() => {
+          if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: 'NextStop Commute GPS Alarm',
+              artist: 'Active Metro Geofence Tracking',
+              album: 'NextStop Metro',
+              artwork: [{ src: '/train-icon.svg', sizes: '96x96', type: 'image/svg+xml' }],
+            });
+
+            navigator.mediaSession.setActionHandler('play', () => {});
+            navigator.mediaSession.setActionHandler('pause', () => {});
+          }
+        })
+        .catch((err) => console.warn('Background heartbeat audio play warning:', err));
+    } catch (e) {
+      console.warn('Background audio session warning:', e);
+    }
+  }
+
+  stopBackgroundHeartbeat() {
+    if (this.silentAudioElement) {
+      try {
+        this.silentAudioElement.pause();
+      } catch (e) {}
+    }
+  }
+
+  // Show System Notification on Lock Screen or over other apps
   showBackgroundNotification(title, bodyText) {
     if ('Notification' in window && Notification.permission === 'granted') {
       try {
         const notification = new Notification(title, {
           body: bodyText,
           icon: '/train-icon.svg',
-          requireInteraction: true, // Keep notification visible until dismissed
-          vibrate: [500, 200, 500, 200, 1000],
+          badge: '/train-icon.svg',
+          requireInteraction: true,
+          vibrate: [500, 200, 500, 200, 1000, 200, 1000],
           tag: 'nextstop-metro-alarm',
+          renotify: true,
         });
 
         notification.onclick = () => {
@@ -83,7 +127,7 @@ class AudioAlarmEngine {
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(880, now);
           osc.frequency.exponentialRampToValueAtTime(1320, now + 0.4);
-          gain.gain.setValueAtTime(0.8, now);
+          gain.gain.setValueAtTime(0.9, now);
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
 
           osc.start(now);
@@ -91,7 +135,7 @@ class AudioAlarmEngine {
         } else if (type === 'digital_beep') {
           osc.type = 'square';
           osc.frequency.setValueAtTime(1046.5, now);
-          gain.gain.setValueAtTime(0.6, now);
+          gain.gain.setValueAtTime(0.8, now);
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
 
           osc.start(now);
@@ -100,7 +144,7 @@ class AudioAlarmEngine {
           // Classic Metro Two-Tone Chime
           osc.type = 'sine';
           osc.frequency.setValueAtTime(659.25, now);
-          gain.gain.setValueAtTime(0.7, now);
+          gain.gain.setValueAtTime(0.8, now);
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
 
           osc.start(now);
@@ -114,7 +158,7 @@ class AudioAlarmEngine {
 
             osc2.type = 'sine';
             osc2.frequency.setValueAtTime(523.25, now2);
-            gain2.gain.setValueAtTime(0.7, now2);
+            gain2.gain.setValueAtTime(0.8, now2);
             gain2.gain.exponentialRampToValueAtTime(0.01, now2 + 0.6);
 
             osc2.connect(gain2);

@@ -10,25 +10,28 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '14px 18px',
-        marginBottom: '4px',
+        padding: '12px 14px',
+        marginBottom: '2px',
+        flexWrap: 'wrap',
+        gap: '10px',
       }}
     >
       {/* Brand & Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <div
           style={{
             background: 'linear-gradient(135deg, #EC4899, #8B5CF6)',
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
+            width: '38px',
+            height: '38px',
+            borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(236, 72, 153, 0.4)',
+            boxShadow: '0 4px 14px rgba(236, 72, 153, 0.4)',
+            flexShrink: 0,
           }}
         >
-          <Train size={24} color="#FFFFFF" />
+          <Train size={22} color="#FFFFFF" />
         </div>
 
         <div>
@@ -36,7 +39,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: '900',
-              fontSize: '1.25rem',
+              fontSize: '1.15rem',
               letterSpacing: '-0.5px',
               color: 'var(--text-primary)',
               lineHeight: '1.1',
@@ -46,7 +49,7 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
           </div>
           <div
             style={{
-              fontSize: '0.72rem',
+              fontSize: '0.68rem',
               fontWeight: '800',
               color: 'var(--accent-blue)',
             }}
@@ -57,27 +60,27 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
       </div>
 
       {/* Actions & City Switcher */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap' }}>
         {/* City Selector */}
         <select
           value={selectedCityId}
           onChange={(e) => onCityChange(e.target.value)}
           style={{
-            background: isDarkMode ? 'rgba(30, 41, 59, 0.8)' : '#FFFFFF',
+            background: isDarkMode ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
             color: isDarkMode ? '#F8FAFC' : '#020617',
             border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '2px solid #2563EB',
             borderRadius: '10px',
-            padding: '8px 10px',
-            fontSize: '0.8rem',
+            padding: '6px 8px',
+            fontSize: '0.76rem',
             fontWeight: '800',
             outline: 'none',
             cursor: 'pointer',
-            boxShadow: isDarkMode ? 'none' : '0 2px 8px rgba(37, 99, 235, 0.15)',
+            maxWidth: '125px',
           }}
         >
           {CITIES.map((city) => (
             <option key={city.id} value={city.id} style={{ color: '#020617', fontWeight: '700' }}>
-              {city.name.split(' ')[0]} Metro
+              {city.name.split(' ')[0]}
             </option>
           ))}
         </select>
@@ -90,18 +93,18 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             background: isDarkMode ? 'rgba(59, 130, 246, 0.2)' : 'linear-gradient(135deg, #2563EB, #1D4ED8)',
             border: isDarkMode ? '1px solid rgba(59, 130, 246, 0.4)' : 'none',
             color: '#FFFFFF',
-            padding: '8px 12px',
+            padding: '6px 10px',
             borderRadius: '10px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            fontSize: '0.78rem',
+            gap: '4px',
+            fontSize: '0.74rem',
             fontWeight: '800',
-            boxShadow: isDarkMode ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.3)',
+            flexShrink: 0,
           }}
         >
-          <Map size={16} /> Map
+          <Map size={14} /> Map
         </button>
 
         {/* Theme Toggle */}
@@ -112,17 +115,17 @@ export default function Header({ selectedCityId, onCityChange, isDarkMode, onTog
             background: isDarkMode ? 'rgba(255, 255, 255, 0.08)' : '#FEF08A',
             border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '2px solid #CA8A04',
             color: isDarkMode ? '#F59E0B' : '#854D0E',
-            width: '36px',
-            height: '36px',
+            width: '32px',
+            height: '32px',
             borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
+            flexShrink: 0,
           }}
         >
-          {isDarkMode ? <Sun size={18} color="#F59E0B" /> : <Moon size={18} color="#854D0E" />}
+          {isDarkMode ? <Sun size={16} color="#F59E0B" /> : <Moon size={16} color="#854D0E" />}
         </button>
       </div>
     </header>
