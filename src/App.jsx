@@ -385,9 +385,21 @@ function MainAppContent() {
         onOpenMap={() => setIsMapOpen(true)}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area: UNIFIED MAIN CARD CONTAINER matching LiveTracker card screen fit */}
       {!isTracking ? (
-        <>
+        <div
+          className="glass-card"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+            border: '1.5px solid var(--border-glass)',
+            borderRadius: '18px',
+            padding: '14px',
+            boxSizing: 'border-box',
+            width: '100%',
+          }}
+        >
           {/* Quick Saved Commutes */}
           <FavoritesBar onSelectFavorite={handleSelectFavorite} />
 
@@ -434,7 +446,7 @@ function MainAppContent() {
               </button>
             )}
           </div>
-        </>
+        </div>
       ) : (
         <>
           {/* Active Live Tracker Screen */}

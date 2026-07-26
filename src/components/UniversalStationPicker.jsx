@@ -49,7 +49,6 @@ export default function UniversalStationPicker({
 
   return (
     <div
-      className="glass-card"
       style={{
         display: 'flex',
         flexDirection: 'column',

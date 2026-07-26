@@ -5,9 +5,7 @@ import { DEFAULT_FAVORITES } from '../data/metroData';
 export default function FavoritesBar({ onSelectFavorite }) {
   return (
     <div
-      className="glass-card"
       style={{
-        padding: '12px 14px',
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
