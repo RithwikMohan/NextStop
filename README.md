@@ -1,16 +1,35 @@
-# React + Vite
+🚇 NextStop Metro — Smart GPS Commute Alarm & Interchange Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+💡 The Story & Inspiration
+Have you ever plugged in your headphones on a crowded metro train, lost yourself doomscrolling Instagram, or fallen fast asleep—only to wake up and realize you’ve missed your stop?
 
-Currently, two official plugins are available:
+We’ve all been there. Metro announcements are easily drowned out by music or lost in heavy commuting fatigue.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+That frustration inspired the creation of NextStop Metro—a smart, location-aware GPS alarm system designed to track your metro train in real-time and alert you one stop before your destination, so you’re always ready to deboard stress-free!
 
-## React Compiler
+✨ Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🌐 Pan-India Metro Network: Seamlessly supports major metro systems across India including Hyderabad (HMRL), Delhi (DMRC), Bengaluru (BMRCL Namma Metro), Mumbai (MMMOCL), Chennai (CMRL), and Kolkata Metro.
 
-## Expanding the Oxlint configuration
+📍 Smart Line-Free Station Search: Simply type your Boarding and Destination stations. The app automatically calculates the best route, line changes, stops count, commute time, and official ticket fares.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+🔀 Interchange & Platform Transfer Guide: Moving between metro lines (e.g. Blue to Red Line at Ameerpet or Yellow to Blue Line at Majestic)? NextStop gives step-by-step level and platform transfer directions so you never get lost.
+
+🔒 Background & Lock-Screen Alarm Engine: Works continuously in the background! Even if your phone screen is turned OFF, locked, or you are active on other apps like WhatsApp or Instagram, the alarm rings and alerts you on time.
+
+🔊 Ringtones & Spoken Voice Announcements: Custom ringtone sounds (Classic Metro Chime, Loud Siren, Digital Beep) combined with spoken voice announcements ("Wake Up! Next stop is your destination...").
+
+⚡ Interactive Simulator Mode: Want to see how the app works right now without being on a train? Test the full commute alarm flow using the built-in real-time simulator.
+
+
+📱 How to Install as a Mobile App (PWA)
+You don't need to download anything from the App Store! NextStop Metro is built as a Progressive Web App (PWA) that installs directly onto your phone:
+
+Open https://nextstop-metro.netlify.app/ in Google Chrome or Safari on your mobile phone.
+Tap the 3 dots menu (⋮) or the Share icon in your browser.
+Tap "Add to Home Screen" (or "Install App").
+Done! NextStop Metro will appear on your home screen right alongside WhatsApp and Instagram, ready for your daily commute.
+🔗 Try It Out Live Now!
+👉 https://nextstop-metro.netlify.app/
+
+Never miss your metro stop again. Happy commuting! 🚆✨
